@@ -559,31 +559,26 @@
         .replaceAll("'", "&#039;");
     }
 
-    function highlight(text) {
+ function highlight(text) {
   if (!text) return "";
 
-  const blocks = String(text)
-    .split(/(?<=。|；|;|\.|\n)/)   // 按句切分
-    .map(s => s.trim())
-    .filter(Boolean);
+  let html = escapeHtml(text);
 
-  return blocks.map(s => {
+  const words = highlightWords
+    .slice()
+    .sort((a, b) => b.length - a.length);
 
-    // 只对“关键句”加高亮
-    if (
-      /MyBatis|Spring|IoC|DI|MVC|JDBC|Controller|Service|DAO|Mapper/i.test(s)
-    ) {
-      return `<div style="
-        background:#fff3b0;
-        padding:6px 10px;
-        border-radius:8px;
-        margin:4px 0;
-        font-weight:600;
-      ">${escapeHtml(s)}</div>`;
-    }
+  for (const word of words) {
 
-    return `<div>${escapeHtml(s)}</div>`;
-  }).join("");
+    // ⭐ 关键升级：词边界匹配（避免乱高亮）
+    const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    const reg = new RegExp(`(${escaped})(?![a-zA-Z0-9_])`, "gi");
+
+    html = html.replace(reg, `<mark>$1</mark>`);
+  }
+
+  return html;
 }
 
     function normalizeQuestion(item, index, fileName) {
