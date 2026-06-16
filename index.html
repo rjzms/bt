@@ -1,168 +1,223 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>卡片背题系统</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>简答题卡片背题</title>
 
-<style>
-body{
-  margin:0;
-  font-family:-apple-system, sans-serif;
-  background:#f6f8ff;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-/* ===== 主卡片 ===== */
-.card{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  padding:16px;
-  box-sizing:border-box;
-}
+    :root {
+      --bg: #f3f7ff;
+      --card: #ffffff;
+      --text: #142033;
+      --muted: #6b7890;
+      --blue: #3478f6;
+      --blue-soft: #eaf2ff;
+      --border: #dfe8f7;
+      --yellow: #fff0a8;
+      --shadow: 0 14px 40px rgba(52, 120, 246, 0.14);
+    }
 
-/* 顶部信息 */
-.top{
-  display:flex;
-  justify-content:space-between;
-  font-size:12px;
-  color:#888;
-}
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(180deg, #eef5ff 0%, #f8fbff 100%);
+      color: var(--text);
+    }
 
-/* 题目 */
-.q{
-  font-size:24px;
-  font-weight:800;
-  margin-top:26px;
-  line-height:1.4;
-}
+    .app {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 18px 14px 120px; /* ⭐关键：给底部按钮留空间 */
+    }
 
-/* 答案 */
-.a{
-  margin-top:16px;
-  padding:14px;
-  background:#eaf1ff;
-  border-radius:14px;
-  display:none;
-  font-size:15px;
-  line-height:1.6;
-}
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
 
-.a.show{
-  display:block;
-}
+    .title {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 850;
+    }
 
-/* 撑开 */
-.spacer{
-  flex:1;
-}
+    .sub {
+      color: var(--muted);
+      font-size: 13px;
+    }
 
-/* ===== 底部按钮栏（重点优化） ===== */
-.bar{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  display:grid;
-  grid-template-columns:2fr 2fr 2fr 1fr;
-  gap:6px;
-  padding:10px;
-  background:rgba(255,255,255,0.95);
-  border-top:1px solid #eee;
-}
+    .card {
+      background: var(--card);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+    }
 
-/* 基础按钮 */
-button{
-  padding:12px 6px;
-  border:none;
-  border-radius:12px;
-  font-size:13px;
-  background:#f2f4ff;
-}
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--muted);
+    }
 
-/* 主按钮（上一题 / 下一题） */
-.big{
-  background:#3b7cff;
-  color:#fff;
-  font-weight:600;
-}
+    .question {
+      font-size: 24px;
+      font-weight: 850;
+      margin-top: 10px;
+      line-height: 1.4;
+    }
 
-/* 中间按钮 */
-.mid{
-  background:#e9efff;
-}
+    .answer {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 14px;
+      background: #f3f7ff;
+      display: none;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
 
-/* 小按钮（随机） */
-.small{
-  font-size:12px;
-}
-</style>
+    .answer.show {
+      display: block;
+    }
+
+    .actions {
+      margin-top: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    button {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 14px;
+      padding: 12px;
+      font-weight: 700;
+    }
+
+    .primary {
+      background: var(--blue);
+      color: white;
+      border: none;
+    }
+
+    /* ⭐⭐⭐ 核心修改：底部固定按钮栏 */
+    .actions {
+      position: fixed;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+
+      display: grid;
+      grid-template-columns: 1.2fr 1.2fr 1.2fr 0.8fr;
+      gap: 8px;
+
+      padding: 10px;
+      border-radius: 16px;
+
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(10px);
+
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    /* ⭐按钮优化（手机手感） */
+    .actions button {
+      padding: 12px 6px;
+      font-size: 13px;
+      border-radius: 12px;
+    }
+
+    .actions button:nth-child(1),
+    .actions button:nth-child(3) {
+      background: var(--blue);
+      color: white;
+      border: none;
+      font-weight: 800;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="card">
+<div class="app">
 
   <div class="top">
-    <span id="info">加载题库中...</span>
-    <span id="progress">0/0</span>
+    <div>
+      <h1 class="title">简答题卡片</h1>
+      <div class="sub">GitHub JSON 自动刷题</div>
+    </div>
   </div>
 
-  <div class="q" id="q">请先加载 JSON 题库</div>
+  <div class="card">
 
-  <div class="a" id="a"></div>
+    <div class="meta">
+      <span id="info">加载中...</span>
+      <span id="progress">0/0</span>
+    </div>
 
-  <div class="spacer"></div>
+    <div class="question" id="q">正在读取题库...</div>
+
+    <div class="answer" id="a"></div>
+
+  </div>
+
 </div>
 
-<!-- ===== 底部控制栏 ===== -->
-<div class="bar">
-  <button class="big" onclick="prev()">← 上一题</button>
-
-  <button class="mid" onclick="toggle()">显示答案</button>
-
-  <button class="big" onclick="next()">下一题 →</button>
-
-  <button class="small" onclick="randomQ()">随机</button>
+<!-- ⭐⭐⭐ 底部固定按钮（优化重点） -->
+<div class="actions">
+  <button onclick="prev()">← 上一题</button>
+  <button onclick="toggle()">答案</button>
+  <button onclick="next()">下一题 →</button>
+  <button onclick="randomQ()">随机</button>
 </div>
 
 <script>
 
-/* ===== 数据 ===== */
 let data = [];
 let i = 0;
 
-/* ===== GitHub配置（完全不改你的逻辑） ===== */
+/* GitHub配置（不动你的逻辑） */
 const USER = "rjzms";
 const REPO = "bt";
 const BRANCH = "main";
 
-/* ===== 加载 JSON ===== */
-async function load(){
+/* 读取 JSON */
+async function load() {
 
-  const url =
-    `https://api.github.com/repos/${USER}/${REPO}/contents?ref=${BRANCH}`;
+  const url = `https://api.github.com/repos/${USER}/${REPO}/contents?ref=${BRANCH}`;
 
   const res = await fetch(url);
   const files = await res.json();
 
   const jsonFiles = files.filter(f => f.name.endsWith(".json"));
 
-  for(let f of jsonFiles){
+  for (let f of jsonFiles) {
     const r = await fetch(f.download_url);
     const arr = await r.json();
     data.push(...arr);
   }
 
   document.getElementById("info").innerText =
-    `题库：${jsonFiles.length} 文件 / ${data.length} 题`;
+    `题库：${jsonFiles.length}文件 / ${data.length}题`;
 
   render();
 }
 
-/* ===== 渲染 ===== */
-function render(){
-  if(!data.length) return;
+function render() {
+  if (!data.length) return;
 
   const d = data[i];
 
@@ -170,40 +225,38 @@ function render(){
   document.getElementById("a").innerText = d.a || "";
 
   document.getElementById("progress").innerText =
-    `${i+1}/${data.length}`;
+    `${i + 1}/${data.length}`;
 }
 
-/* ===== 操作 ===== */
-function next(){
-  if(i < data.length-1) i++;
+function next() {
+  if (i < data.length - 1) i++;
   render();
 }
 
-function prev(){
-  if(i > 0) i--;
+function prev() {
+  if (i > 0) i--;
   render();
 }
 
-function randomQ(){
-  i = Math.floor(Math.random()*data.length);
+function randomQ() {
+  i = Math.floor(Math.random() * data.length);
   render();
 }
 
-function toggle(){
+function toggle() {
   document.getElementById("a").classList.toggle("show");
 }
 
-/* ===== 手机滑动（保留体验） ===== */
+/* 手机滑动 */
 let startX = 0;
 
-document.addEventListener("touchstart",e=>{
+document.addEventListener("touchstart", e => {
   startX = e.touches[0].clientX;
 });
 
-document.addEventListener("touchend",e=>{
+document.addEventListener("touchend", e => {
   let dx = e.changedTouches[0].clientX - startX;
-
-  if(Math.abs(dx) > 60){
+  if (Math.abs(dx) > 60) {
     dx > 0 ? prev() : next();
   }
 });
