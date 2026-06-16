@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>简答题卡片背题</title>
   <style>
     * {
@@ -26,6 +26,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
       background: linear-gradient(180deg, #eef5ff 0%, #f8fbff 100%);
       color: var(--text);
+      -webkit-tap-highlight-color: transparent;
     }
 
     .app {
@@ -357,29 +358,29 @@
 
     @media (max-width: 520px) {
       .app {
-        padding: 14px 10px 28px;
+        padding: 12px 12px 100px;
       }
 
       .title {
-        font-size: 24px;
+        font-size: 22px;
       }
 
       .panel {
-        border-radius: 18px;
+        border-radius: 16px;
       }
 
       .card {
-        border-radius: 22px;
+        border-radius: 20px;
         padding: 16px;
-        min-height: calc(100vh - 300px);
+        min-height: calc(100vh - 240px);
       }
 
       .question {
-        font-size: 23px;
+        font-size: 21px;
       }
 
       .answer {
-        font-size: 16px;
+        font-size: 15px;
       }
 
       .row,
@@ -387,55 +388,37 @@
         grid-template-columns: 1fr;
       }
 
-      button {
-        padding: 12px 10px;
+      .actions {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: 20px;
+        z-index: 999;
+        display: grid;
+        grid-template-columns: 2fr 1.5fr 1.5fr 1fr;
+        gap: 8px;
+        padding: 12px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        box-shadow: 0 10px 30px rgba(52, 120, 246, 0.2);
+        margin-top: 0;
       }
-      @media (max-width: 520px) {
 
-  .actions {
-    position: fixed !important;
-    left: 10px;
-    right: 10px;
-    bottom: calc(10px + env(safe-area-inset-bottom));
+      .actions button {
+        padding: 12px 0;
+        font-size: 13px;
+        border-radius: 14px;
+      }
 
-    z-index: 9999;
+      .actions .wide {
+        grid-column: auto;
+      }
 
-    display: grid;
-    grid-template-columns: 1.2fr 1.2fr 1.2fr 0.8fr;
-    gap: 8px;
-
-    padding: 10px;
-    border-radius: 16px;
-
-    background: rgba(255,255,255,0.96);
-    backdrop-filter: blur(12px);
-
-    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-  }
-
-  .card {
-    padding-bottom: 140px !important;
-  }
-        @media (max-width: 520px) {
-
-  /* ===== 只缩小底部操作按钮 ===== */
-  .actions button {
-    padding: 9px 8px !important;
-    font-size: 12px !important;
-    border-radius: 10px !important;
-  }
-
-  /* 显示答案按钮稍微突出一点（但不变大） */
-  #toggleAnswer {
-    font-weight: 800;
-  }
-
-  /* 整体间距稍微压缩 */
-  .actions {
-    gap: 6px !important;
-  }
-}
-}
+      #toggleAnswer {
+        font-weight: 800;
+      }
     }
   </style>
 </head>
@@ -559,27 +542,30 @@
         .replaceAll("'", "&#039;");
     }
 
- function highlight(text) {
-  if (!text) return "";
+    function highlight(text) {
+      if (!text) return "";
+      let html = escapeHtml(text);
 
-  let html = escapeHtml(text);
+      html = html.replace(/\*\*([^*]{1,20})\*\*/g, '<mark>$1</mark>');
+      
+      html = html.replace(/([「【《])([^」】》]{1,20})([」】》])/g, '$1<mark>$2</mark>$3');
 
-  const words = highlightWords
-    .slice()
-    .sort((a, b) => b.length - a.length);
+      const words = highlightWords.filter(w => w.trim().length > 0 && w.length <= 20).sort((a, b) => b.length - a.length);
 
-  for (const word of words) {
+      words.forEach(word => {
+        const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const reg = new RegExp(`(${escaped})`, "gi");
+        html = html.replace(reg, (match, p1, offset, string) => {
+          const before = string.slice(0, offset);
+          if (before.lastIndexOf('<mark>') > before.lastIndexOf('</mark>')) {
+            return match;
+          }
+          return `<mark>${match}</mark>`;
+        });
+      });
 
-    // ⭐ 关键升级：词边界匹配（避免乱高亮）
-    const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-    const reg = new RegExp(`(${escaped})(?![a-zA-Z0-9_])`, "gi");
-
-    html = html.replace(reg, `<mark>$1</mark>`);
-  }
-
-  return html;
-}
+      return html;
+    }
 
     function normalizeQuestion(item, index, fileName) {
       return {
