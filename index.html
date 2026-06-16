@@ -560,14 +560,31 @@
     }
 
     function highlight(text) {
-      let html = escapeHtml(text);
-      const words = [...highlightWords].sort((a, b) => b.length - a.length);
-      for (const word of words) {
-        const safe = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        html = html.replace(new RegExp(safe, "gi"), (m) => `<mark>${m}</mark>`);
-      }
-      return html;
+  if (!text) return "";
+
+  const blocks = String(text)
+    .split(/(?<=。|；|;|\.|\n)/)   // 按句切分
+    .map(s => s.trim())
+    .filter(Boolean);
+
+  return blocks.map(s => {
+
+    // 只对“关键句”加高亮
+    if (
+      /MyBatis|Spring|IoC|DI|MVC|JDBC|Controller|Service|DAO|Mapper/i.test(s)
+    ) {
+      return `<div style="
+        background:#fff3b0;
+        padding:6px 10px;
+        border-radius:8px;
+        margin:4px 0;
+        font-weight:600;
+      ">${escapeHtml(s)}</div>`;
     }
+
+    return `<div>${escapeHtml(s)}</div>`;
+  }).join("");
+}
 
     function normalizeQuestion(item, index, fileName) {
       return {
