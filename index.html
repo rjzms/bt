@@ -416,6 +416,25 @@
   .card {
     padding-bottom: 140px !important;
   }
+        @media (max-width: 520px) {
+
+  /* ===== 只缩小底部操作按钮 ===== */
+  .actions button {
+    padding: 9px 8px !important;
+    font-size: 12px !important;
+    border-radius: 10px !important;
+  }
+
+  /* 显示答案按钮稍微突出一点（但不变大） */
+  #toggleAnswer {
+    font-weight: 800;
+  }
+
+  /* 整体间距稍微压缩 */
+  .actions {
+    gap: 6px !important;
+  }
+}
 }
     }
   </style>
