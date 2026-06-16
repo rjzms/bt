@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>卡片背题</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">GitHub JSON 自动题库</div>
+        <h1>卡片背题</h1>
+      </div>
+      <button id="themeBtn" class="icon-btn" title="切换深浅色">🌙</button>
+    </header>
+
+    <section class="panel repo-panel">
+      <div class="repo-row">
+        <label>
+          GitHub 用户名
+          <input id="ownerInput" placeholder="例如 rjzms" />
+        </label>
+        <label>
+          仓库名
+          <input id="repoInput" placeholder="例如 bt" />
+        </label>
+        <label>
+          分支
+          <input id="branchInput" value="main" />
+        </label>
+        <label>
+          JSON 目录
+          <input id="dirInput" placeholder="留空=根目录；如 data" />
+        </label>
+      </div>
+      <div class="actions-row">
+        <button id="saveRepoBtn" class="primary">保存仓库设置</button>
+        <button id="refreshBanksBtn">刷新题库列表</button>
+        <button id="mergeAllBtn">合并全部 JSON</button>
+        <button id="exportBtn">导出当前 JSON</button>
+        <button id="clearLocalBtn" class="danger">清空本地记录</button>
+      </div>
+      <p class="hint">把多个 <code>.json</code> 文件上传到这个仓库根目录或指定目录，点“刷新题库列表”后会自动识别。你在 GitHub 删除 JSON 后，再刷新列表就会消失。</p>
+    </section>
+
+    <section class="panel banks-panel">
+      <div class="section-title">
+        <h2>题库文件</h2>
+        <span id="bankCount">0 个</span>
+      </div>
+      <div id="bankList" class="bank-list empty">暂无题库，请先保存仓库设置并刷新。</div>
+    </section>
+
+    <section class="panel filters-panel">
+      <input id="searchInput" placeholder="搜索题目 / 答案 / 关键词" />
+      <select id="typeFilter">
+        <option value="简答题">只看简答题</option>
+        <option value="all">全部题型</option>
+        <option value="单选题">单选题</option>
+        <option value="判断题">判断题</option>
+      </select>
+      <select id="statusFilter">
+        <option value="all">全部状态</option>
+        <option value="review">待复习</option>
+        <option value="mastered">已掌握</option>
+        <option value="new">未标记</option>
+      </select>
+      <button id="addBtn">新增题目</button>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat"><b id="totalCount">0</b><span>总题数</span></div>
+      <div class="stat"><b id="shortCount">0</b><span>简答题</span></div>
+      <div class="stat"><b id="masteredCount">0</b><span>已掌握</span></div>
+      <div class="stat"><b id="reviewCount">0</b><span>待复习</span></div>
+    </section>
+
+    <main class="main-grid">
+      <section class="card-wrap">
+        <article id="studyCard" class="study-card">
+          <div class="card-top">
+            <span id="typeBadge" class="badge">简答题</span>
+            <span id="progressText">0 / 0</span>
+          </div>
+          <div class="label">题目</div>
+          <h2 id="questionText">请先刷新并选择一个 JSON 题库</h2>
+          <div id="answerBox" class="answer hidden">
+            <div class="label">答案</div>
+            <div id="answerText"></div>
+            <div id="descText" class="desc"></div>
+          </div>
+          <div class="card-actions">
+            <button id="showAnswerBtn" class="primary">显示答案</button>
+            <button id="masteredBtn">已掌握</button>
+            <button id="reviewBtn">待复习</button>
+            <button id="prevBtn">上一题</button>
+            <button id="nextBtn">下一题</button>
+            <button id="randomBtn">随机</button>
+          </div>
+        </article>
+      </section>
+
+      <aside class="panel manage-panel">
+        <div class="section-title">
+          <h2>题目管理</h2>
+          <span id="listCount">0 条</span>
+        </div>
+        <div id="questionList" class="question-list"></div>
+      </aside>
+    </main>
+  </div>
+
+  <dialog id="editDialog">
+    <form method="dialog" class="edit-form">
+      <h2 id="dialogTitle">编辑题目</h2>
+      <label>题型<input id="editType" placeholder="简答题" /></label>
+      <label>题目<textarea id="editQ" rows="4"></textarea></label>
+      <label>答案<textarea id="editA" rows="7"></textarea></label>
+      <label>解析 / 关键词<textarea id="editDesc" rows="4"></textarea></label>
+      <div class="dialog-actions">
+        <button id="cancelEditBtn" value="cancel">取消</button>
+        <button id="saveEditBtn" value="default" class="primary">保存到本地</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
