@@ -390,6 +390,33 @@
       button {
         padding: 12px 10px;
       }
+      @media (max-width: 520px) {
+
+  .actions {
+    position: fixed !important;
+    left: 10px;
+    right: 10px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+
+    z-index: 9999;
+
+    display: grid;
+    grid-template-columns: 1.2fr 1.2fr 1.2fr 0.8fr;
+    gap: 8px;
+
+    padding: 10px;
+    border-radius: 16px;
+
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(12px);
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  }
+
+  .card {
+    padding-bottom: 140px !important;
+  }
+}
     }
   </style>
 </head>
