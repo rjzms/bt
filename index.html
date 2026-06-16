@@ -1,783 +1,197 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>简答题卡片背题</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    :root {
-      --bg: #f3f7ff;
-      --card: #ffffff;
-      --text: #142033;
-      --muted: #6b7890;
-      --blue: #3478f6;
-      --blue-soft: #eaf2ff;
-      --border: #dfe8f7;
-      --yellow: #fff0a8;
-      --shadow: 0 14px 40px rgba(52, 120, 246, 0.14);
-    }
-
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
-      background: linear-gradient(180deg, #eef5ff 0%, #f8fbff 100%);
-      color: var(--text);
-    }
-
-    .app {
-      width: 100%;
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 18px 14px 32px;
-    }
-
-    .top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .title {
-      margin: 0;
-      font-size: 26px;
-      font-weight: 850;
-      letter-spacing: -0.5px;
-    }
-
-    .sub {
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .gear {
-      border: 1px solid var(--border);
-      background: var(--card);
-      border-radius: 999px;
-      width: 42px;
-      height: 42px;
-      font-size: 20px;
-      cursor: pointer;
-      box-shadow: var(--shadow);
-    }
-
-    .panel,
-    .card,
-    .mini-card {
-      background: rgba(255,255,255,0.92);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      box-shadow: var(--shadow);
-    }
-
-    .panel {
-      padding: 12px;
-      margin-bottom: 12px;
-    }
-
-    .settings {
-      display: none;
-      gap: 8px;
-    }
-
-    .settings.show {
-      display: grid;
-    }
-
-    label {
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    input,
-    select,
-    button {
-      font: inherit;
-    }
-
-    input,
-    select {
-      width: 100%;
-      border: 1px solid var(--border);
-      background: white;
-      color: var(--text);
-      border-radius: 14px;
-      padding: 12px 13px;
-      outline: none;
-    }
-
-    input:focus,
-    select:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(52, 120, 246, 0.12);
-    }
-
-    button {
-      border: 1px solid var(--border);
-      background: white;
-      color: var(--text);
-      border-radius: 14px;
-      padding: 12px 14px;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .primary {
-      background: var(--blue);
-      border-color: var(--blue);
-      color: white;
-    }
-
-    .soft {
-      background: var(--blue-soft);
-      color: var(--blue);
-      border-color: #d3e3ff;
-    }
-
-    .danger {
-      color: #e5484d;
-      background: #fff0f0;
-      border-color: #ffd3d3;
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .row3 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
-    }
-
-    .full {
-      grid-column: 1 / -1;
-    }
-
-    .toolbar {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .switch-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 8px 10px;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--muted);
-      user-select: none;
-    }
-
-    .toggle input {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--blue);
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .mini-card {
-      padding: 12px;
-    }
-
-    .num {
-      font-size: 22px;
-      font-weight: 850;
-    }
-
-    .name {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 3px;
-    }
-
-    .sources {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 3px;
-    }
-
-    .chip {
-      flex: 0 0 auto;
-      padding: 9px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: white;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .chip.active {
-      background: var(--blue);
-      color: white;
-      border-color: var(--blue);
-    }
-
-    .card {
-      padding: 18px;
-      min-height: 390px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .tag {
-      background: var(--blue-soft);
-      color: var(--blue);
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-weight: 800;
-      font-size: 12px;
-    }
-
-    .question {
-      font-size: 24px;
-      line-height: 1.35;
-      font-weight: 850;
-      letter-spacing: -0.3px;
-      margin: 6px 0 0;
-    }
-
-    .answer {
-      display: none;
-      background: #f3f7ff;
-      border: 1px solid #dce9ff;
-      border-radius: 18px;
-      padding: 15px;
-      font-size: 16px;
-      line-height: 1.75;
-      white-space: pre-wrap;
-    }
-
-    .answer.show {
-      display: block;
-    }
-
-    .desc {
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.65;
-      white-space: pre-wrap;
-    }
-
-    mark {
-      background: var(--yellow);
-      color: #7a4d00;
-      border-radius: 6px;
-      padding: 0 4px;
-      font-weight: 850;
-    }
-
-    .actions {
-      margin-top: auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .actions .wide {
-      grid-column: 1 / -1;
-    }
-
-    .empty {
-      color: var(--muted);
-      text-align: center;
-      padding: 30px 10px;
-      line-height: 1.8;
-    }
-
-    .status {
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 8px;
-      line-height: 1.6;
-    }
-
-    @media (min-width: 720px) {
-      .toolbar {
-        grid-template-columns: 1fr 220px;
-      }
-
-      .settings {
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-      }
-
-      .settings .buttons {
-        grid-column: 1 / -1;
-      }
-
-      .actions {
-        grid-template-columns: repeat(4, 1fr);
-      }
-
-      .actions .wide {
-        grid-column: auto;
-      }
-    }
-
-    @media (max-width: 520px) {
-      .app {
-        padding: 14px 10px 28px;
-      }
-
-      .title {
-        font-size: 24px;
-      }
-
-      .panel {
-        border-radius: 18px;
-      }
-
-      .card {
-        border-radius: 22px;
-        padding: 16px;
-        min-height: calc(100vh - 300px);
-      }
-
-      .question {
-        font-size: 23px;
-      }
-
-      .answer {
-        font-size: 16px;
-      }
-
-      .row,
-      .row3 {
-        grid-template-columns: 1fr;
-      }
-
-      button {
-        padding: 12px 10px;
-      }
-      @media (max-width: 520px) {
-
-  .actions {
-    position: fixed !important;
-    left: 10px;
-    right: 10px;
-    bottom: calc(10px + env(safe-area-inset-bottom));
-
-    z-index: 9999;
-
-    display: grid;
-    grid-template-columns: 1.2fr 1.2fr 1.2fr 0.8fr;
-    gap: 8px;
-
-    padding: 10px;
-    border-radius: 16px;
-
-    background: rgba(255,255,255,0.96);
-    backdrop-filter: blur(12px);
-
-    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-  }
-
-  .card {
-    padding-bottom: 140px !important;
-  }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卡片背题</title>
+
+<style>
+body{
+  margin:0;
+  font-family:-apple-system;
+  background:#f5f7ff;
 }
-    }
-  </style>
+
+/* ===== 顶部控制（弱化） ===== */
+.panel{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  background:white;
+  border-bottom:1px solid #eee;
+  z-index:10;
+  padding:10px;
+}
+
+/* 默认收起（重点） */
+.panel-content{
+  display:none;
+}
+
+/* 打开才显示 */
+.panel.open .panel-content{
+  display:block;
+}
+
+/* ===== 卡片核心 ===== */
+.card{
+  padding:70px 16px 120px;
+}
+
+/* 题目 */
+.q{
+  font-size:26px;
+  font-weight:800;
+  line-height:1.4;
+}
+
+/* 答案 */
+.a{
+  margin-top:20px;
+  padding:16px;
+  background:#eaf1ff;
+  border-radius:14px;
+  display:none;
+  white-space:pre-wrap;
+}
+
+.a.show{
+  display:block;
+}
+
+/* ===== 底部操作 ===== */
+.bar{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  padding:10px;
+  gap:8px;
+  background:white;
+  border-top:1px solid #eee;
+  z-index:20;
+}
+
+button{
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:#f2f4ff;
+}
+
+.primary{
+  background:#3478f6;
+  color:white;
+}
+</style>
 </head>
 
 <body>
-  <main class="app">
-    <section class="top">
-      <div>
-        <h1 class="title">简答题卡片</h1>
-        <div class="sub">从 GitHub 自动读取多个 JSON，手机刷题用</div>
-      </div>
-      <button class="gear" id="settingBtn">⚙️</button>
-    </section>
 
-    <section class="panel settings" id="settings">
-      <div>
-        <label>GitHub 用户名</label>
-        <input id="owner" placeholder="例如 rjzms" />
-      </div>
-      <div>
-        <label>仓库名</label>
-        <input id="repo" placeholder="例如 bt" />
-      </div>
-      <div>
-        <label>分支</label>
-        <input id="branch" placeholder="main" />
-      </div>
-      <div>
-        <label>JSON 目录</label>
-        <input id="dir" placeholder="留空=根目录，如 data" />
-      </div>
-      <div class="buttons full row">
-        <button class="primary" id="saveBtn">保存设置</button>
-        <button id="refreshBtn">刷新题库</button>
-      </div>
-      <div class="status full" id="loadStatus"></div>
-    </section>
+<!-- ===== 设置层（弱化） ===== -->
+<div class="panel" id="panel">
+  <button onclick="togglePanel()">☰ 题库 / 设置</button>
 
-    <section class="panel">
-      <div class="sources" id="sourceList"></div>
-    </section>
+  <div class="panel-content">
+    <div id="info">加载中...</div>
+    <input placeholder="搜索题目">
+  </div>
+</div>
 
-    <section class="panel toolbar">
-      <input id="search" placeholder="搜索题目 / 答案 / 关键词" />
-      <div class="switch-row">
-        <select id="typeFilter">
-          <option value="简答题">只看简答题</option>
-          <option value="all">全部题型</option>
-        </select>
-        <label class="toggle">
-          <input type="checkbox" id="alwaysShow" />
-          始终显示答案
-        </label>
-      </div>
-    </section>
+<!-- ===== 学习层 ===== -->
+<div class="card">
 
-    <section class="stats">
-      <div class="mini-card">
-        <div class="num" id="totalNum">0</div>
-        <div class="name">题目</div>
-      </div>
-      <div class="mini-card">
-        <div class="num" id="nowNum">0</div>
-        <div class="name">当前</div>
-      </div>
-      <div class="mini-card">
-        <div class="num" id="fileNum">0</div>
-        <div class="name">题库</div>
-      </div>
-    </section>
+  <div class="q" id="q">加载中...</div>
 
-    <section class="card">
-      <div class="meta">
-        <span class="tag" id="typeTag">简答题</span>
-        <span id="progress">0 / 0</span>
-      </div>
+  <div class="a" id="a"></div>
 
-      <div>
-        <div class="sub">题目</div>
-        <h2 class="question" id="question">正在读取题库……</h2>
-      </div>
+</div>
 
-      <div class="answer" id="answerBox">
-        <div class="sub">答案</div>
-        <div id="answer"></div>
-        <div class="desc" id="desc"></div>
-      </div>
+<!-- ===== 底部操作 ===== -->
+<div class="bar">
+  <button onclick="prev()">上一题</button>
+  <button class="primary" onclick="toggleAnswer()">显示答案</button>
+  <button onclick="next()">下一题</button>
+</div>
 
-      <div class="actions">
-        <button class="primary wide" id="toggleAnswer">显示答案</button>
-        <button id="prevBtn">上一题</button>
-        <button id="nextBtn">下一题</button>
-        <button class="soft" id="randomBtn">随机</button>
-      </div>
-    </section>
-  </main>
+<script>
 
-  <script>
-    const $ = (id) => document.getElementById(id);
+let data=[];
+let i=0;
 
-    let allQuestions = [];
-    let filtered = [];
-    let currentIndex = 0;
-    let activeSource = "all";
-    let sourceFiles = [];
+const USER="rjzms";
+const REPO="bt";
+const BRANCH="main";
 
-    const highlightWords = [
-      "MyBatis", "JDBC", "XML", "SQL", "Mapper", "Spring", "IoC", "DI", "AOP",
-      "控制反转", "依赖注入", "Spring 容器", "Bean", "Controller", "Service",
-      "Dao", "DAO", "POJO", "ModelAndView", "@RequestMapping", "@RequestParam",
-      "@RequestBody", "@ResponseBody", "@RestController", "DispatcherServlet",
-      "MVC", "JSON", "RESTful", "持久层", "业务层", "表示层", "三层架构"
-    ];
+/* ===== 顶部面板 ===== */
+function togglePanel(){
+  document.getElementById("panel").classList.toggle("open");
+}
 
-    function escapeHtml(text) {
-      return String(text ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
+/* ===== 数据加载 ===== */
+async function load(){
+  const url=`https://api.github.com/repos/${USER}/${REPO}/contents?ref=${BRANCH}`;
+  const res=await fetch(url);
+  const files=await res.json();
 
-    function highlight(text) {
-      let html = escapeHtml(text);
-      const words = [...highlightWords].sort((a, b) => b.length - a.length);
-      for (const word of words) {
-        const safe = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        html = html.replace(new RegExp(safe, "gi"), (m) => `<mark>${m}</mark>`);
-      }
-      return html;
-    }
+  const jsonFiles=files.filter(f=>f.name.endsWith(".json"));
 
-    function normalizeQuestion(item, index, fileName) {
-      return {
-        id: item.id ?? index + 1,
-        type: item.type || "简答题",
-        q: item.q || item.question || item.title || "",
-        a: item.a || item.answer || "",
-        desc: item.desc || item.analysis || item.keyword || "",
-        source: fileName
-      };
-    }
+  for(let f of jsonFiles){
+    const r=await fetch(f.download_url);
+    const arr=await r.json();
+    data.push(...arr);
+  }
 
-    function saveSettings() {
-      const config = {
-        owner: $("owner").value.trim(),
-        repo: $("repo").value.trim(),
-        branch: $("branch").value.trim() || "main",
-        dir: $("dir").value.trim()
-      };
-      localStorage.setItem("cardRepoConfig", JSON.stringify(config));
-      loadFromGithub();
-    }
+  document.getElementById("info").innerText=
+    `题库：${jsonFiles.length}个 / ${data.length}题`;
 
-    function loadSettings() {
-      const saved = JSON.parse(localStorage.getItem("cardRepoConfig") || "{}");
-      $("owner").value = saved.owner || "rjzms";
-      $("repo").value = saved.repo || "bt";
-      $("branch").value = saved.branch || "main";
-      $("dir").value = saved.dir || "";
-    }
+  render();
+}
 
-    function apiUrl() {
-      const owner = $("owner").value.trim();
-      const repo = $("repo").value.trim();
-      const branch = $("branch").value.trim() || "main";
-      const dir = $("dir").value.trim().replace(/^\/|\/$/g, "");
-      const path = dir ? `/contents/${encodeURIComponent(dir)}` : "/contents";
-      return `https://api.github.com/repos/${owner}/${repo}${path}?ref=${encodeURIComponent(branch)}`;
-    }
+/* ===== 渲染 ===== */
+function render(){
+  if(!data.length) return;
 
-    async function loadFromGithub() {
-      const owner = $("owner").value.trim();
-      const repo = $("repo").value.trim();
+  const d=data[i];
 
-      if (!owner || !repo) {
-        $("loadStatus").textContent = "请先填写 GitHub 用户名和仓库名。";
-        return;
-      }
+  document.getElementById("q").innerText=d.q;
+  document.getElementById("a").innerText=d.a;
 
-      $("loadStatus").textContent = "正在读取 GitHub 仓库中的 JSON 文件……";
-      allQuestions = [];
-      sourceFiles = [];
-      activeSource = "all";
-      renderSources();
-      render();
+  document.querySelector(".primary").innerText="显示答案";
+}
 
-      try {
-        const res = await fetch(apiUrl(), { cache: "no-store" });
-        if (!res.ok) throw new Error(`GitHub API 读取失败：${res.status}`);
+/* ===== 操作 ===== */
+function next(){ if(i<data.length-1) i++; render(); }
+function prev(){ if(i>0) i--; render(); }
 
-        const files = await res.json();
-        const jsonFiles = Array.isArray(files)
-          ? files.filter(f => f.type === "file" && f.name.toLowerCase().endsWith(".json"))
-          : [];
+function toggleAnswer(){
+  document.getElementById("a").classList.toggle("show");
+}
 
-        if (!jsonFiles.length) {
-          $("loadStatus").textContent = "没有识别到 JSON 文件。请把 .json 上传到仓库根目录或填写正确 JSON 目录。";
-          return;
-        }
+load();
 
-        for (const file of jsonFiles) {
-          const rawUrl = file.download_url + `?t=${Date.now()}`;
-          const jsonRes = await fetch(rawUrl, { cache: "no-store" });
-          if (!jsonRes.ok) continue;
+/* ===== 点击任意区域显示答案（沉浸模式） ===== */
+document.querySelector(".card").onclick=function(){
+  toggleAnswer();
+}
 
-          const data = await jsonRes.json();
-          const arr = Array.isArray(data) ? data : (Array.isArray(data.questions) ? data.questions : []);
-          if (!arr.length) continue;
+/* ===== 滑动 ===== */
+let startX=0;
+document.addEventListener("touchstart",e=>{
+  startX=e.touches[0].clientX;
+});
 
-          sourceFiles.push(file.name);
-          arr.forEach((item, index) => {
-            allQuestions.push(normalizeQuestion(item, index, file.name));
-          });
-        }
+document.addEventListener("touchend",e=>{
+  let dx=e.changedTouches[0].clientX-startX;
+  if(Math.abs(dx)>60){
+    dx>0?prev():next();
+  }
+});
 
-        $("loadStatus").textContent = `已读取 ${sourceFiles.length} 个 JSON，共 ${allQuestions.length} 道题。`;
-        renderSources();
-        applyFilter();
-      } catch (err) {
-        $("loadStatus").textContent = "读取失败：" + err.message;
-      }
-    }
+</script>
 
-    function renderSources() {
-      const box = $("sourceList");
-      box.innerHTML = "";
-
-      const all = document.createElement("button");
-      all.className = "chip" + (activeSource === "all" ? " active" : "");
-      all.textContent = `全部 ${sourceFiles.length || 0}`;
-      all.onclick = () => {
-        activeSource = "all";
-        currentIndex = 0;
-        renderSources();
-        applyFilter();
-      };
-      box.appendChild(all);
-
-      sourceFiles.forEach(name => {
-        const btn = document.createElement("button");
-        btn.className = "chip" + (activeSource === name ? " active" : "");
-        btn.textContent = name;
-        btn.onclick = () => {
-          activeSource = name;
-          currentIndex = 0;
-          renderSources();
-          applyFilter();
-        };
-        box.appendChild(btn);
-      });
-    }
-
-    function applyFilter() {
-      const keyword = $("search").value.trim().toLowerCase();
-      const type = $("typeFilter").value;
-
-      filtered = allQuestions.filter(item => {
-        const sourceOk = activeSource === "all" || item.source === activeSource;
-        const typeOk = type === "all" || item.type === type;
-        const text = `${item.q} ${item.a} ${item.desc}`.toLowerCase();
-        const keywordOk = !keyword || text.includes(keyword);
-        return sourceOk && typeOk && keywordOk;
-      });
-
-      if (currentIndex >= filtered.length) currentIndex = 0;
-      render();
-    }
-
-    function render() {
-      $("totalNum").textContent = filtered.length || 0;
-      $("nowNum").textContent = filtered.length ? currentIndex + 1 : 0;
-      $("fileNum").textContent = sourceFiles.length || 0;
-      $("progress").textContent = filtered.length ? `${currentIndex + 1} / ${filtered.length}` : "0 / 0";
-
-      if (!filtered.length) {
-        $("typeTag").textContent = "简答题";
-        $("question").innerHTML = "暂无题目";
-        $("answer").innerHTML = "";
-        $("desc").innerHTML = "";
-        $("answerBox").classList.remove("show");
-        $("toggleAnswer").textContent = "显示答案";
-        return;
-      }
-
-      const item = filtered[currentIndex];
-      $("typeTag").textContent = item.type;
-      $("question").innerHTML = highlight(item.q);
-      $("answer").innerHTML = highlight(item.a);
-      $("desc").innerHTML = item.desc ? highlight(item.desc) : "";
-
-      const show = $("alwaysShow").checked;
-      $("answerBox").classList.toggle("show", show);
-      $("toggleAnswer").textContent = show ? "隐藏答案" : "显示答案";
-    }
-
-    function next() {
-      if (!filtered.length) return;
-      currentIndex = (currentIndex + 1) % filtered.length;
-      render();
-    }
-
-    function prev() {
-      if (!filtered.length) return;
-      currentIndex = (currentIndex - 1 + filtered.length) % filtered.length;
-      render();
-    }
-
-    function randomOne() {
-      if (!filtered.length) return;
-      currentIndex = Math.floor(Math.random() * filtered.length);
-      render();
-    }
-
-    $("settingBtn").onclick = () => $("settings").classList.toggle("show");
-    $("saveBtn").onclick = saveSettings;
-    $("refreshBtn").onclick = loadFromGithub;
-    $("search").oninput = applyFilter;
-    $("typeFilter").onchange = applyFilter;
-
-    $("alwaysShow").onchange = () => {
-      localStorage.setItem("alwaysShowAnswer", $("alwaysShow").checked ? "1" : "0");
-      render();
-    };
-
-    $("toggleAnswer").onclick = () => {
-      if (!filtered.length) return;
-      const box = $("answerBox");
-      box.classList.toggle("show");
-      $("toggleAnswer").textContent = box.classList.contains("show") ? "隐藏答案" : "显示答案";
-    };
-
-    $("nextBtn").onclick = next;
-    $("prevBtn").onclick = prev;
-    $("randomBtn").onclick = randomOne;
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowRight") next();
-      if (e.key === "ArrowLeft") prev();
-      if (e.key === " ") {
-        e.preventDefault();
-        $("toggleAnswer").click();
-      }
-    });
-
-    let touchStartX = 0;
-    document.addEventListener("touchstart", e => {
-      touchStartX = e.changedTouches[0].clientX;
-    });
-
-    document.addEventListener("touchend", e => {
-      const diff = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(diff) > 70) {
-        diff < 0 ? next() : prev();
-      }
-    });
-
-    loadSettings();
-    $("alwaysShow").checked = localStorage.getItem("alwaysShowAnswer") === "1";
-    loadFromGithub();
-  </script>
 </body>
 </html>
