@@ -24,98 +24,98 @@
     "id": 4,
     "type": "简答题",
     "q": "请简述在使用 <foreach> 时，collection 属性需要注意的几点。",
-    "a": "<foreach> 用于遍历集合、数组或 Map，collection 属性用于指定要遍历的数据来源。传入数组时，collection 通常写 array；传入 List 集合时，通常写 list 或 collection；传入 Map 时，需要写 Map 中对应的 key；如果方法中有多个参数，一般要使用 @Param 注解给参数命名，然后在 collection 中使用该名称。除此之外，item 表示当前遍历元素，index 表示索引或键，open 和 close 表示开始和结束符号，separator 表示分隔符。",
-    "desc": "熟背关键词：array、list、Map 的 key、多参数用 @Param、item/index/separator。"
+    "a": "在使用 MyBatis 的 <foreach> 元素时，collection 属性的取值取决于传入参数的类型：第一，如果传入的是单个数组或 List 集合，MyBatis 会自动将其封装为 Map，此时 collection 的值分别固定为 'array' 或 'list'；第二，如果传入了多个参数，需要使用 @Param 注解或手动封装为 Map，此时 collection 的值应为 Map 中对应的键（Key）；第三，如果传入的是 POJO 包装类，collection 的值应当是该包装类中需要被遍历的集合或数组属性名。",
+    "desc": "熟背关键词：单个数组或List（array/list）、多个参数（Map的键）、POJO包装类（属性名）。"
   },
   {
     "id": 5,
     "type": "简答题",
     "q": "请简述 Spring 框架的优点。",
-    "a": "Spring 是一个轻量级的企业级开发框架，主要优点是降低代码耦合、提高开发效率和便于系统扩展。Spring 通过 IoC/DI 管理对象的创建和依赖关系，使对象之间不需要直接创建彼此，从而降低耦合。Spring 还支持 AOP 面向切面编程，可以把事务、日志、安全等公共功能从业务代码中抽离出来。除此之外，Spring 还支持声明式事务管理，并且能够方便地整合 MyBatis、Spring MVC 等其他框架。",
-    "desc": "熟背关键词：轻量级、低耦合、IoC/DI、AOP、事务、易整合。"
+    "a": "Spring 框架在 Java 开发中具有许多显著优点：首先，它是非侵入式的，应用对象不需要依赖 Spring 的特定类；其次，通过控制反转（IoC）和依赖注入（DI）实现了对象间的低耦合；第三，支持面向切面编程（AOP），允许将通用任务（如日志、安全、事务等）进行集中管理；第四，提供了强大的声明式事务管理，简化了事务配置；第五，方便进行单元测试和与其他主流框架（如 MyBatis）的集成；最后，它对许多繁琐的 Java EE API 进行了封装，极大地降低了开发难度。",
+    "desc": "熟背关键词：非侵入式、低耦合、支持 AOP、声明式事务、方便测试与集成。"
   },
   {
     "id": 6,
     "type": "简答题",
     "q": "请简述控制反转的概念和依赖注入的概念。",
-    "a": "控制反转，即 IoC，是指对象的创建和对象之间的依赖关系不再由程序员在代码中手动控制，而是交给 Spring 容器统一管理。这样可以减少对象之间的直接依赖，降低程序耦合度。依赖注入，即 DI，是 IoC 的具体实现方式，指 Spring 容器在创建对象时，将该对象所需要的依赖对象自动注入进去。常见注入方式包括构造方法注入、setter 方法注入和注解注入。",
-    "desc": "熟背关键词：IoC 是思想，DI 是实现；对象交容器，依赖自动注入。"
+    "a": "控制反转（IoC）和依赖注入（DI）是 Spring 核心机制。控制反转是一种设计思想，指传统上由开发者手动创建和控制对象的权力，反转交给了 Spring 容器，由容器负责对象的生命周期和依赖关系，从而降低系统耦合度。依赖注入是实现 IoC 的一种具体手段，指 IoC 容器在运行期间，动态地将一个对象所依赖的资源（如另一个对象或属性值）注入到该对象之中。简单来说，IoC 是目的，而 DI 是手段。",
+    "desc": "熟背关键词：控制反转（容器创建控制、降低耦合）、依赖注入（运行期间动态注入资源）。"
   },
   {
     "id": 7,
     "type": "简答题",
-    "q": "请简述 XML 配置文件中 <beans> 根元素下的常用元素及作用。",
-    "a": "<beans> 是 Spring XML 配置文件的根元素，用于管理 Spring 容器中的 Bean 配置。常用子元素包括：<bean> 用于定义一个 Bean 对象；<property> 用于通过 setter 方法进行属性注入；<constructor-arg> 用于通过构造方法进行依赖注入；<import> 用于导入其他 Spring 配置文件；<alias> 用于为 Bean 设置别名。这些元素共同完成 Bean 的定义、装配和配置文件组织。",
-    "desc": "熟背关键词：bean 定义对象，property 属性注入，constructor 构造注入，import 导入，alias 别名。"
+    "q": "请简述 XML 配置文件的根元素是 <beans> 中的常用元素及作用。",
+    "a": "在 Spring 的 XML 配置文件中，根元素是 <beans>，其内部最常用的子元素是 <bean>，用来定义容器中的组件。常用属性包括：第一，id 属性，用于指定 Bean 在容器中的唯一标识符，不能重复；第二，name 属性，用于为 Bean 指定一个或多个别名，多个名称可以用逗号或分号隔开；第三，class 属性，用于指定 Bean 对应实现类的全路径（全限定类名），供容器通过反射创建实例；第四，scope 属性，用于定义 Bean 的作用范围，常见取值有单例（singleton，默认值）、多例（prototype）、以及 Web 环境下的 request 和 session 等。",
+    "desc": "熟背关键词：id（唯一标识）、name（别名）、class（全路径）、scope（作用范围）。"
   },
   {
     "id": 8,
     "type": "简答题",
     "q": "请简述 Bean 的几种装配方式的基本用法。",
-    "a": "Bean 的装配方式主要有 XML 装配、注解装配和 Java 配置类装配。XML 装配是在配置文件中使用 <bean> 定义对象，并通过 <property> 或 <constructor-arg> 注入依赖；注解装配是使用 @Component、@Service、@Repository、@Controller 等注解把类交给 Spring 管理，再使用 @Autowired 自动注入依赖；Java 配置类装配是使用 @Configuration 标注配置类，并通过 @Bean 方法声明 Bean。三种方式都能实现对象创建和依赖注入，实际开发中注解和 Java 配置类更常见。",
-    "desc": "熟背关键词：XML、注解、Java 配置类；bean/property，Component/Autowired，Configuration/Bean。"
+    "a": "Spring 中 Bean 的装配方式主要有三种：第一，XML 装配，包括使用 setter 注入（通过 <property> 元素，要求类必须有无参构造和 setter 方法）和构造方法注入（通过 <constructor-arg> 元素进行参数匹配）；第二，注解装配，通过在类上标注 @Component、@Service、@Controller 等注解，并在属性上使用 @Autowired 或 @Resource 进行自动注入，同时需要在 XML 中开启组件扫描；第三，自动装配，通过在 XML 的 <bean> 元素中设置 autowire 属性，其值可以是 byName（按名称匹配）或 byType（按类型匹配），由容器自动寻找依赖并注入。",
+    "desc": "熟背关键词：XML 装配（setter/构造）、注解装配（@Service/@Autowired）、自动装配（byName/byType）。"
   },
   {
     "id": 9,
     "type": "简答题",
     "q": "请简述 Spring MVC 框架的优点。",
-    "a": "Spring MVC 是基于 MVC 设计模式的 Web 表现层框架，能够将请求处理、业务模型和视图显示分离，使项目结构更加清晰。它以 DispatcherServlet 作为前端控制器，统一接收和分发请求。Spring MVC 支持注解开发，如 @Controller、@RequestMapping 等，可以简化控制器编写。它还支持参数绑定、数据转换、视图解析、异常处理、文件上传以及 RESTful 风格接口开发。由于它可以与 Spring 容器无缝整合，因此适合企业级 Web 项目开发。",
-    "desc": "熟背关键词：MVC 分层、DispatcherServlet、注解开发、参数绑定、视图解析、RESTful、易整合。"
+    "a": "Spring MVC 作为基于 MVC 架构模式的 Web 框架，具有以下显著优点：首先，它与 Spring 框架天然无缝集成，使用简单、上手容易；其次，Web 层分工明确、结构简洁，通过前端控制器（DispatcherServlet）统一分发请求；第三，请求映射非常灵活，使用 @RequestMapping 注解即可轻松绑定 URL；第四，具备强大的数据绑定、类型转换和数据验证机制；第五，内置对国际化（i18n）的良好支持；第六，支持多种视图技术，如传统的 JSP 以及 Thymeleaf、FreeMarker 等；最后，框架具有极高的扩展性和定制性。",
+    "desc": "熟背关键词：易用简洁、请求映射灵活、数据绑定验证、支持多种视图、易扩展。"
   },
   {
     "id": 10,
     "type": "简答题",
     "q": "请列举 @RequestMapping 注解的属性。",
-    "a": "@RequestMapping 用于建立请求路径和控制器方法之间的映射关系，既可以标注在类上，也可以标注在方法上。常用属性包括：value 或 path，用于指定请求路径；method 用于指定请求方式，如 GET、POST、PUT、DELETE；params 用于限制请求参数条件；headers 用于限制请求头条件；consumes 用于指定请求提交内容的类型；produces 用于指定响应内容的类型；name 用于给映射起名称。其中最常用的是 value/path 和 method。",
-    "desc": "熟背关键词：value/path 路径，method 方法，params 参数，headers 请求头，consumes 请求类型，produces 响应类型。"
+    "a": "@RequestMapping 注解用于映射 URL 到控制器的类或方法上，它拥有多个重要属性：第一，value/path 属性，用于指定请求的映射 URL（默认属性）；第二，method 属性，用于限制请求的 HTTP 方法（如 GET、POST 等）；第三，params 属性，用于限制请求中必须包含特定的参数或满足特定条件；第四，headers 属性，用于限制请求头中必须包含的信息；第五，consumes 属性，指定处理请求的媒体类型（Content-Type），如 application/json；第六，produces 属性，指定返回的媒体类型；第七，name 属性，为该映射分配一个可读的别名。",
+    "desc": "熟背关键词：value（URL）、method（请求方式）、params（参数限制）、headers（请求头）、consumes/produces（类型）。"
   },
   {
     "id": 11,
     "type": "简答题",
     "q": "请简述简单数据类型中的 @RequestParam 注解及其属性作用。",
-    "a": "@RequestParam 用于将 HTTP 请求中的参数绑定到控制器方法的形参上，常用于简单数据类型的参数绑定。例如请求中有 id=1，就可以把它绑定到方法参数 Integer id 上。它的常用属性包括：value 或 name，用于指定请求参数名；required 用于指定该参数是否必须传入，默认通常为 true；defaultValue 用于设置默认值，当请求中没有传递该参数时使用默认值。使用 @RequestParam 可以解决请求参数名和方法形参名不一致的问题。",
-    "desc": "熟背关键词：绑定请求参数；name/value 参数名，required 是否必填，defaultValue 默认值。"
+    "a": "在 Spring MVC 中，@RequestParam 注解主要用于将指定的请求参数绑定到控制器的映射方法形参上，常用来解决 HTTP 请求参数名与方法形参名称不一致的问题。该注解包含三个核心属性：第一，value 或 name 属性，用于指定 HTTP 请求参数的名称；第二，required 属性，类型为布尔值，用于指定该参数是否为必传项，默认值为 true（如果请求中缺失该参数会报错）；第三，defaultValue 属性，用于在请求中没有提供该参数时，指定一个默认的降级数据值。",
+    "desc": "熟背关键词：解决参数名不一致、value（参数名）、required（是否必传）、defaultValue（默认值）。"
   },
   {
     "id": 12,
     "type": "简答题",
     "q": "请简述复杂 POJO 绑定时的注意事项。",
-    "a": "复杂 POJO 绑定是指 Spring MVC 将请求参数自动封装到一个 Java 对象中。绑定时，请求参数名必须和 POJO 类中的属性名保持一致，否则无法正确赋值。POJO 类一般需要提供无参构造方法、属性对应的 getter 和 setter 方法。如果 POJO 中包含日期类型、集合类型或嵌套对象，还需要注意参数格式、类型转换和对象层级关系。对于日期类型，可以使用 @DateTimeFormat 指定格式。这样 Spring MVC 才能把前端提交的数据正确绑定到对象中。",
-    "desc": "熟背关键词：参数名等于属性名，无参构造，getter/setter，类型转换，嵌套层级。"
+    "a": "在 Spring MVC 中进行复杂 POJO（普通 Java 对象）类型的数据绑定时，需要特别注意：客户端（如表单或 AJAX 请求）提交的请求参数名称，必须与 POJO 类中定义的属性名称完全一致。Spring MVC 底层会根据参数名反射调用 POJO 的 setter 方法进行赋值。如果名称不一致，框架将无法正确匹配并进行自动封装，导致该属性接收到的值为 null。因此，保持前端传参名称与后端实体类属性名严格一致是成功绑定的关键。",
+    "desc": "熟背关键词：请求参数名、POJO属性名、完全一致、否则为 null。"
   },
   {
     "id": 13,
     "type": "简答题",
     "q": "请简述 @RequestBody 注解的作用。",
-    "a": "@RequestBody 用于读取 HTTP 请求体中的数据，并通过消息转换器将请求体内容转换成 Java 对象。它常用于接收前端提交的 JSON 数据，特别适合前后端分离项目。例如前端发送 JSON 格式的用户信息，后端可以使用 @RequestBody User user 接收并封装成 User 对象。它和 @RequestParam 不同，@RequestParam 主要接收 URL 或表单中的简单参数，而 @RequestBody 主要接收请求体中的 JSON、XML 等数据。",
-    "desc": "熟背关键词：读取请求体，JSON 转 Java 对象，前后端分离常用。"
+    "a": "@RequestBody 注解在 Spring MVC 中主要用于读取 HTTP 请求体（body）中的数据，通常结合 Jackson 等 JSON 解析库使用。当客户端发送 Content-Type 为 application/json 的请求时，@RequestBody 会将接收到的 JSON 格式字符串自动反序列化并绑定到控制器方法的对应形参（如 POJO 对象或 Map）中。这在处理复杂的非表单数据、特别是前后端分离开发和 AJAX 交互时非常常用。",
+    "desc": "熟背关键词：读取请求体、JSON 数据、自动绑定/反序列化、形参接收。"
   },
   {
     "id": 14,
     "type": "简答题",
     "q": "请简述包装 POJO 类型绑定时的注意事项。",
-    "a": "包装 POJO 是指一个 POJO 类中包含另一个 POJO 对象作为属性。进行包装 POJO 绑定时，请求参数名不仅要和属性名一致，还要体现对象之间的层级关系。例如包装类中有 User user 属性，User 中有 name 和 age，请求参数就应写成 user.name、user.age。如果还有更深层次的嵌套，也要按照对象属性逐层书写。包装 POJO 绑定的关键是让 Spring MVC 能根据参数名找到对应的内部对象属性。",
-    "desc": "熟背关键词：对象套对象，参数写层级，user.name、user.age。"
+    "a": "在绑定包含嵌套结构的包装 POJO 类型（一个 POJO 中包含其他对象或集合）时，前端传参格式需满足特定规范：第一，对于嵌套的对象类型，传参格式必须采用点语法，即 '嵌套对象属性名.属性名'（例如 user.name）；第二，对于 List 集合类型，如果是简单类型泛型，参数名与 List 属性名一致，若为对象类型泛型，则需要带上下标索引描述具体位置，如 'list属性名[0].属性名'；第三，对于 Map 类型，需要使用键值映射的括号格式来描述位置，如 'map属性名[\"key\"]'。严格遵守这些格式才能让 Spring MVC 准确地将数据组装进包装类中。",
+    "desc": "熟背关键词：嵌套对象（点语法）、List 集合（下标索引）、Map 类型（键值括号）。"
   },
   {
     "id": 15,
     "type": "简答题",
-    "q": "请简述 Spring MVC 方法返回值中 3 种不同类型的区别。",
-    "a": "Spring MVC 控制器方法常见返回值有 String、ModelAndView 和直接响应数据三类。返回 String 时，一般表示逻辑视图名，Spring MVC 会通过视图解析器跳转到对应页面；返回 ModelAndView 时，可以同时封装模型数据和视图信息，既能传数据，又能指定跳转页面；返回对象、集合或字符串并配合 @ResponseBody 使用时，表示不进行页面跳转，而是把返回值直接写入响应体，通常转换成 JSON 返回给客户端。三者的区别主要在于：String 偏向页面跳转，ModelAndView 同时处理数据和视图，@ResponseBody 偏向接口数据响应。",
-    "desc": "熟背关键词：String 视图名，ModelAndView 模型加视图，@ResponseBody 直接返回数据。"
+    "q": "请简述 Spring MVC 方法返回值 3 种不同类型的区别。",
+    "a": "Spring MVC 映射方法常用的三种返回值类型具有明确的区别：第一，void 类型，此时没有返回值，Spring MVC 会默认将请求的映射路径作为逻辑视图名，组合视图解析器的前缀和后缀进行默认页面跳转，或者由开发者通过原生 Response 自行输出数据；第二，String 类型，最常用的方式，返回的字符串会被视图解析器解析为逻辑视图名，从而跳转到对应的页面资源，也可以通过 'redirect:' 或 'forward:' 前缀实现重定向或转发；第三，ModelAndView 类型，它同时包含了模型数据（Model）和逻辑视图（View），允许开发者在一个对象中既设置数据又指定跳转目标，在页面渲染时会将数据和视图合并输出。",
+    "desc": "熟背关键词：void（默认页面）、String（逻辑视图名/跳转路径）、ModelAndView（同时包含数据和视图）。"
   },
   {
     "id": 16,
     "type": "简答题",
     "q": "请简述 @ResponseBody 注解的作用。",
-    "a": "@ResponseBody 用于将控制器方法的返回值直接写入 HTTP 响应体，而不是交给视图解析器进行页面跳转。它通常配合 Jackson 等消息转换器，把 Java 对象、集合或 Map 转换成 JSON 数据返回给客户端。该注解常用于 AJAX 请求和前后端分离接口开发。@RestController 相当于 @Controller 和 @ResponseBody 的组合，因此使用 @RestController 后，类中方法默认返回响应体数据。",
-    "desc": "熟背关键词：不跳页面，直接写响应体，Java 对象转 JSON，RestController 包含它。"
+    "a": "@ResponseBody 注解的作用是将控制器方法的返回值直接写入到 HTTP 响应体（ResponseBody）中，而不是解析为跳转的视图页面。在现代开发中，它通常结合配置好的 HttpMessageConverter（如 Jackson），将返回的 Java 对象、集合或基本数据自动转换为指定格式（通常是 JSON 格式）输出给客户端。如果将该注解标注在控制器类上，则表示该类中的所有方法都会应用此效果；而常用的 @RestController 注解正是 @Controller 和 @ResponseBody 的组合简写，专门用于构建 RESTful 风格的控制器。",
+    "desc": "熟背关键词：写入响应体、不解析为视图、自动转JSON、@RestController 组合键。"
   },
   {
     "id": 17,
     "type": "简答题",
-    "q": "请结合案例，展开说明三层架构。",
-    "a": "三层架构通常包括表示层、业务层和持久层。表示层一般由 Controller 组成，负责接收用户请求、获取请求参数、调用业务层并返回结果；业务层一般由 Service 组成，负责处理具体业务逻辑，如数据校验、业务判断、事务控制等；持久层一般由 Dao 或 Mapper 组成，负责与数据库交互，完成增删改查操作。以用户登录为例：用户在页面输入账号和密码后，请求首先到达表示层的 UserController；Controller 接收参数后调用业务层的 UserService；Service 判断账号密码是否为空、密码是否正确，并调用持久层的 UserMapper 查询数据库；Mapper 执行 SQL 查询用户信息后返回给 Service，Service 再把登录成功或失败的结果返回给 Controller，最后由 Controller 响应给前端。三层架构的优点是职责清晰、降低耦合、便于维护、测试和扩展。",
-    "desc": "熟背关键词：Controller 接请求，Service 处理业务，Dao/Mapper 操作数据库；登录案例。"
+    "q": "请结合宠物社区诊所的案例，展开说明三层架构，10分必考。",
+    "a": "在宠物社区诊所系统的开发中，三层架构的应用如下：1. 表现层（由 Spring MVC 实现）：主要负责与诊所用户的界面展示和数据交互。例如，在“宠物医生列表”页面中，当前端用户点击查询时，表现层控制器接收到 HTTP 请求，通过调用业务层获取医生数据，再将数据转换成 JSON 通过 AJAX 返回，动态更新前端页面展示。2. 业务逻辑层（由 Spring 实现）：负责处理诊所的具体核心业务规则与控制。例如，当管理员对违规用户进行“封号”操作时，业务层负责校验该管理员是否有操作权限、验证该用户是否已被封禁，并处理关联的宠物病历单状态修改等逻辑，起到承上启下的核心作用。3. 数据持久层（由 MyBatis 实现）：专注于与数据库的交互，执行具体的增删改查操作。例如，当业务层需要展示医生信息或更新用户状态时，持久层通过 Mapper 接口及其对应的 SQL 映射文件，向数据库发送 SELECT * FROM doctors 或 UPDATE users SET status = 0 的 SQL 语句，完成数据的存取。",
+    "desc": "熟背关键词：表现层（Spring MVC/界面交互）、业务层（Spring/核心业务规则）、持久层（MyBatis/数据库SQL交互）。"
   }
 ]
